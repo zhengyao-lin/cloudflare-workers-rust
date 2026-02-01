@@ -3,11 +3,7 @@ import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 import { Log, LogLevel, Miniflare } from "miniflare";
 
-import {
-  REPO_ROOT,
-  TEST_HOST,
-  TEST_PORT,
-} from "./consts";
+import { REPO_ROOT, TEST_HOST, TEST_PORT } from "./consts";
 
 // Global miniflare instance
 export let globalWorker: Miniflare | undefined;
