@@ -1,0 +1,12 @@
+dist
+build
+pkg
+target
+node_modules
+.wrangler
+.old
+.vscode
+.DS_Store
+.claude
+.test
+test-results/

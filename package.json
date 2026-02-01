@@ -1,0 +1,23 @@
+{
+  "name": "rust-example",
+  "workspaces": [
+    "ui",
+    "tests"
+  ],
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "cargo test && playwright install --with-deps chromium && playwright test",
+    "lint": "cargo clippy --all-targets --all-features && tsc --noEmit && eslint",
+    "fmt": "cargo fmt && prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.5.0",
+    "playwright": "^1.57.0",
+    "prettier": "3.7.4",
+    "wrangler": "^4.56.0"
+  }
+}

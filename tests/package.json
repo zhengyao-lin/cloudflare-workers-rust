@@ -1,0 +1,10 @@
+{
+  "name": "tests",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "miniflare": "^4.20251217.0",
+    "typescript": "^5.9.3"
+  }
+}

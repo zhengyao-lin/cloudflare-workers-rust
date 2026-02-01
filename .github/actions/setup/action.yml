@@ -1,0 +1,39 @@
+inputs:
+  version:
+    description: Cache version used for invalidation
+    required: false
+    default: 0
+  cargo-profile:
+    description: Differentiate different cargo build caches
+    required: false
+    default: "release"
+  cargo-install-profile:
+    description: Differentiate different cargo install caches
+    required: false
+    default: "default"
+
+runs:
+  using: composite
+  steps:
+    - name: Cargo install cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cargo
+        key: cargo-install-${{ inputs.cargo-install-profile }}-v${{ inputs.version }}-${{ runner.os }}-${{ hashFiles('wrangler.toml') }}
+        restore-keys: cargo-install-${{ inputs.cargo-install-profile }}-v${{ inputs.version }}-${{ runner.os }}-
+    - name: Rust toolchain cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.rustup
+        key: rust-toolchain-v${{ inputs.version }}-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml') }}
+        restore-keys: rust-toolchain-v${{ inputs.version }}-${{ runner.os }}-
+    - name: Cargo build cache
+      uses: actions/cache@v4
+      with:
+        path: target
+        key: cargo-build-${{ inputs.cargo-profile }}-v${{ inputs.version }}-${{ runner.os }}-${{ hashFiles('rust-toolchain.toml', '.cargo/config.toml', '**/Cargo.toml', '**/Cargo.lock') }}
+        restore-keys: cargo-build-${{ inputs.cargo-profile }}-v${{ inputs.version }}-${{ runner.os }}-
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: npm

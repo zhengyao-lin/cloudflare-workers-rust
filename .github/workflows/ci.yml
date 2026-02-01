@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+
+env:
+  CACHE_VERSION: 0
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          version: ${{ env.CACHE_VERSION }}
+          cargo-profile: debug
+      - run: npm ci
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo fmt --check
+      - run: npx tsc --noEmit
+      - run: npx eslint --max-warnings 0
+      - run: npx prettier --check .
+
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          version: ${{ env.CACHE_VERSION }}
+          cargo-profile: release
+          cargo-install-profile: deploy
+      - run: npm ci
+      - run: cargo test
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+
+  # Set up GitHub secret with key `CLOUDFLARE_API_TOKEN` to enable auto-deployment in CI
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   name: Deploy
+  #   needs: [lint, test]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./.github/actions/setup
+  #       with:
+  #         version: ${{ env.CACHE_VERSION }}
+  #         cargo-profile: release
+  #         cargo-install-profile: deploy
+  #     - run: npm ci
+  #     - uses: cloudflare/wrangler-action@v3
+  #       with:
+  #         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
