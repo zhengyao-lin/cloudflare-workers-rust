@@ -2,8 +2,8 @@
 
 The template is using:
 - Rust for both the server and frontend code
-- Leptos and Thaw UI as the frontend UI framework
-- Playwright for testing.
+- [Leptos](https://leptos.dev/) and [Thaw UI](https://thawui.vercel.app/) as the frontend UI framework
+- [Playwright](https://playwright.dev/) for testing
 
 ## Usage
 
